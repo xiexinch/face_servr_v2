@@ -110,3 +110,4 @@ config.json
 .DS_Store
 baidutoken.json
 public/images
+posts
