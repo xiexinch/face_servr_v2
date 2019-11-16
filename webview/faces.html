@@ -50,7 +50,11 @@
             <div id="image_content">
                 <center v-for="img of currentImageUrls" >
                     <van-image  :src="'/'+img" 
-                    fit="fill" />
+                    fit="fill" >
+                        <template v-slot:loading>
+                            <van-loading type="spinner" size="20" />
+                        </template>
+                    </van-image>
                 </center>
                 <center>
                     <van-button @click="addFace()" icon="add-o" type="primary">添加照片</van-button>
