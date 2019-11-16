@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <title>人脸库</title>
+</head>
+<body>
+    <div>
+        <div id="info_list">
+            <ul>
+                <li v-for="info of info_list"><a href="#">{{info}}</a></li>
+            </ul>
+        </div>
+        <div id="image_content"></div>
+    </div>
+    <script>
+        let infoList = new Vue({
+            el: '#info_list',
+            data: {
+                info_list: []
+            },
+            created() {
+                axios.get('http://localhost:8000/face/get_faces_info').then(response => {
+                    this.info_list.push(response.data)
+                }).catch(error => {
+                    alert(error)
+                })
+            },
+        })
+
+    </script>
+</body>
+</html>
