@@ -4,16 +4,16 @@ let vm = new Vue({
     data: {
         info_list: [],
         images: [],
-        currentImageUrl: "",
+        currentImageUrls: [],
         loading: false,
         finished: false
     },
     created() {
         axios.get('/face/get_faces_info').then(response => {
             this.info_list = response.data
-            this.currentImageUrl = this.info_list[0].url
+            this.currentImageUrls = this.info_list[0].urls
             console.log(response)
-            console.log(this.currentImageUrl)
+            
             this.finished = true
             this.loading = false
         }).catch(error => {
@@ -21,6 +21,16 @@ let vm = new Vue({
         })
     },
     methods: {
+      onChange(index) {
+        this.currentImageUrls = this.info_list[index].urls
+        
+      },
+      addFace() {
+        console.log("click add btn")
+      },
+      deleteFace() {
+        console.log('click delete btn')
+      },
         onLoad() {
             // 异步更新数据
             setTimeout(() => {
@@ -29,12 +39,12 @@ let vm = new Vue({
               }
               // 加载状态结束
               this.loading = false;
-      
               // 数据全部加载完成
               if (this.list.length >= 1) {
                 this.finished = true;
               }
             }, 500);
-          }
+          },
     },
+
 })

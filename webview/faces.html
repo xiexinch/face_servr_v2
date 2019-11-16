@@ -16,16 +16,20 @@
             height: 100%;
         }
         .info_list {
-            float: left;
+            position: fixed;
             width: 30%;
             height: 100%;
-            border: 0 1px 0 0 solid #c4c4c4;
+            left: 0;
+            top: 0;
+            border-right: solid #c4c4c4 1px;
         }
         #image_content {
-            float: right;
-            width: 70%;
-            height: 500px;
-            background-color: antiquewhite;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 64%;
+            padding-left: 5%;
+            
         }
     </style>
 </head>
@@ -37,17 +41,23 @@
                     v-model="loading"
                     :finished="finished"
                     finished-text="没有更多了">
-                    <van-cell v-for="info of info_list" is-link>
+                    <van-cell v-for="(info, index) of info_list" v-on:click="onChange(index)" is-link>
                         <span>{{info.userinfo}}</span>
                         <span name="userid" style="display: none;">{{info.userid}}</span>
                     </van-cell>
                 </van-list>
             </div>
             <div id="image_content">
-                <!-- <img :src="{{currentImageUrl}}" /> -->
-                <van-image :src="'/'+currentImageUrl" 
-                fit="scale-down" >
+                <center v-for="img of currentImageUrls" >
+                    <van-image  :src="'/'+img" 
+                    fit="fill" />
+                </center>
+                <center>
+                    <van-button @click="addFace()" icon="add-o" type="primary">添加照片</van-button>
+                    <van-button @click="deleteFace()" icon="close" type="danger">删除人脸</van-button>
+                </center>
             </div>
+
         </div>
     </div>
     <script src="/javascripts/index.js"></script>
