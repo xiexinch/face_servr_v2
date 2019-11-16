@@ -5,6 +5,7 @@ let vm = new Vue({
         info_list: [],
         images: [],
         currentImageUrls: [],
+        currentIndex: 0,
         loading: false,
         finished: false
     },
@@ -23,13 +24,23 @@ let vm = new Vue({
     methods: {
       onChange(index) {
         this.currentImageUrls = this.info_list[index].urls
-        
+        this.currentIndex = index
       },
       addFace() {
         console.log("click add btn")
+        console.log(myService)
+        let res = myService.addface()
+        alert(res)
       },
       deleteFace() {
         console.log('click delete btn')
+        let res = myService.deletUser(this.info_list[this.currentIndex].userid)
+        axios.get('/face/deleteUser?userid='+this.info_list[this.currentIndex].userid).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(response)
+        })
+        alert(res)
       },
         onLoad() {
             // 异步更新数据

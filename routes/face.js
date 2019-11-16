@@ -81,13 +81,36 @@ router.post('/add_face', posts.single('user_face'), function(req, res, next) {
   let output=fs.createWriteStream(image_url)
   let input=fs.createReadStream(req.file.path)
   input.pipe(output)
-  Face.create({uuid: user_id, user_info: user_info, urls: [image_access_url]}, err => {
+  Face.find({uuid:user_id}, (err, data) => {
     if (err) {
       res.json(err)
       throw err
     }
-    console.log("added " + user_id)
+    console.log(data.length)
+    if (data.length != 0) {
+      console.log(data)
+      let oldUrls = data[0].urls
+      console.log(oldUrls)
+      oldUrls.push(image_access_url)
+      console.log(oldUrls)
+      Face.update({uuid:user_id}, {urls: oldUrls}, err => {
+        if (err) {
+          res.json(err)
+          throw err
+        }
+        console.log("updated " + user_id)
+      })
+    } else {
+      Face.create({uuid: user_id, user_info: user_info, urls: [image_access_url]}, err => {
+        if (err) {
+          res.json(err)
+          throw err
+        }
+        console.log("added " + user_id)
+      })
+    }
   })
+
   Face.find({}, (err, data) => {
     if (err) {
       res.json(err)
@@ -112,14 +135,16 @@ router.get('/get_faces_info', function(req, res, next) {
   })
 })
 
-router.get('/get_face_image', function(req, res, next) {
-  let userid = req.body.userid
-  Face.find({uuid: userid}, (err, face) => {
+router.get('/deleteUser', function(req, res, next) {
+  let userid = req.params.userid
+  console.log(req)
+  console.log(userid)
+  Face.deleteOne({uuid: userid}, (err) => {
     if (err) {
       res.json(err)
       throw err
     }
-    res.json(face.url) 
+    console.log('deleted' + userid)
   })
 })
 
