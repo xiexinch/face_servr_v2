@@ -5,7 +5,7 @@ const fs = require('fs')
 
 const mongoose = require('mongoose')
 //const FaceSchema = require('models/faceModel.js')
-let FaceSchema = {uuid: String, user_info: String, url: String}
+let FaceSchema = {uuid: String, user_info: String, urls: [String]}
 let Face = mongoose.model('face', FaceSchema)
 
 var multer = require('multer')
@@ -18,13 +18,6 @@ fs.readFile('routes/config.json', 'utf8',function(err, data) {
     console.log('**configuration loaded**')
 })
 
-// const FACE_SEARCH_URL = config['face_search_url']
-// const FACE_ADD_URL = config['face_add_url']
-// const TOKEN = config['token']
-// const IMG_PATH = config['image_path']
-// const FILE_PATH = 'public/images/'
-// const IMAGE_TYPE = config['image_type']
-// const GROUP_ID = config['group_id']
 
 router.get('/', function(req, res, next) {
   res.setHeader('Content-Type', 'text/html')
@@ -88,7 +81,7 @@ router.post('/add_face', posts.single('user_face'), function(req, res, next) {
   let output=fs.createWriteStream(image_url)
   let input=fs.createReadStream(req.file.path)
   input.pipe(output)
-  Face.create({uuid: user_id, user_info: user_info, url: image_access_url}, err => {
+  Face.create({uuid: user_id, user_info: user_info, urls: [image_access_url]}, err => {
     if (err) {
       res.json(err)
       throw err
@@ -113,7 +106,7 @@ router.get('/get_faces_info', function(req, res, next) {
     }
     let info_list = []
     faceList.forEach(face => {
-      info_list.push({userinfo: face.user_info, userid: face.uuid, url: face.url})
+      info_list.push({userinfo: face.user_info, userid: face.uuid, urls: face.urls})
     });
     res.json(info_list)
   })
