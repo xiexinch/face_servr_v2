@@ -35,6 +35,7 @@ let vm = new Vue({
       deleteFace() {
         console.log('click delete btn')
         let res = myService.deletUser(this.info_list[this.currentIndex].userid)
+        this.info_list.remove(index)
         axios.get('/face/deleteUser?userid='+this.info_list[this.currentIndex].userid).then(response => {
           console.log(response)
         }).catch(error => {
